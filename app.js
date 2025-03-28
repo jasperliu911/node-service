@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 80; // 默认端口，可改为 80 或其他
+const PORT = 8080; // 默认端口，可改为 80 或其他
 
 // 中间件：解析 JSON 请求体
 app.use(express.json());
