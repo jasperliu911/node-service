@@ -1,21 +1,31 @@
-// app.js
-require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = 80; // 默认端口，可改为 80 或其他
 
-// 微信验证接口（示例）
-app.get('/wx', (req, res) => {
-  const { signature, timestamp, nonce, echostr } = req.query;
-  if (echostr) {
-    console.log('[微信验证] 收到验证请求');
-    res.send(echostr);
-  } else {
-    res.status(400).send('Invalid request');
-  }
+// 中间件：解析 JSON 请求体
+app.use(express.json());
+
+// 测试路由：GET /
+app.get('/', (req, res) => {
+  res.send('Node.js 后台服务已正常运行！');
+});
+
+// 测试路由：POST /api/echo
+app.post('/api/echo', (req, res) => {
+  // 返回客户端发送的 JSON 数据
+  res.json({
+    message: '收到你的请求数据啦！',
+    yourData: req.body
+  });
+});
+
+// 错误处理中间件
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('服务器出错啦！');
 });
 
 // 启动服务
-app.listen(port, () => {
-  console.log(`服务已启动在端口 ${port}`);
+app.listen(PORT, () => {
+  console.log(`服务已启动，访问地址：http://localhost:${PORT}`);
 });
